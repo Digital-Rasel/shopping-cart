@@ -25,11 +25,11 @@
 
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button id="negativeBtn" class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" id="iPhone11Value" class="form-control text-center" value="1">
-                           <button id="positiveBtn" class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button onclick="handleProductChange('phone', false)" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input type="text" id="phone-count" class="form-control text-center" value="1">
+                           <button onclick="handleProductChange('phone', true)" class="btn btn-default"><i class="fas fa-plus"></i></button>
                         </div>
-                        <h5>$ <span id="iPhone11Price" >1219</span></h5>
+                        <h5 id="phone-total">$1219</h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -43,12 +43,12 @@
                      </div>
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button id="negativeBtnCase" class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" id="caseValue" class="form-control text-center" value="1">
-                           <button id="positiveBtnCase" class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button onclick="handleProductChange('case', false)" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                           <input type="text" id="case-count" class="form-control text-center" value="1">
+                           <button onclick="handleProductChange ('case', true)"  class="btn btn-default"><i class="fas fa-plus"></i></button>
 
                         </div>
-                        <h5>$ <span id="casePrice" >59</span></h5>
+                        <h5 id="case-total">$59</h5>
                         <img src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
@@ -64,9 +64,9 @@
                      </div>
 
                      <div class="col-md-4 status">
-                        <h5>$ <span id="subTotal">1278</span></h5>
-                        <h5>$0</h5>
-                        <h5>$ <span id="total">1278</span></h5>
+                        <h5 id="total-price">$1278</h5>
+                        <h5 id="tax-amount">$0</h5>
+                        <h5 id="grand-total">$1278</h5>
                      </div>
                   </div>
                </div>
@@ -78,65 +78,103 @@
       </div>
    </section>
    <script>
-      //Positive Button event handler for iPhone11
-      const positiveBtn = document.getElementById("positiveBtn");
-      positiveBtn.addEventListener("click", function(){
-      document.getElementById("iPhone11Value").value =productCountUpdate('iPhone11Value')+1;
-      const updatePrice = updateSpanText('iPhone11Price') + 1219;
-      document.getElementById("iPhone11Price").innerText = updatePrice ;
-      const subTotal = updateSpanText('subTotal') + 1219;
-      document.getElementById("subTotal").innerText = subTotal;
-      const total = updateSpanText('total') + 1219;
-      document.getElementById("total").innerText = total;
-   })
+     
+            function handleProductChange (product, isIncrease) {
+         let productCount = getInputValue(product);
+         let productNewCount = productCount;
+         if ( isIncrease == true) {
+            productNewCount = productCount + 1;
+         }
+         if (isIncrease == false && productCount> 0) {
+            productNewCount = productCount -1;
+         }
+         document.getElementById(product + '-count').value = productNewCount;
+         if (product == 'phone') {
+            var productTotal = productNewCount * 1219;
+         }
+         if (product == 'case') {
+            var productTotal = productNewCount * 59;
+         }
+         document.getElementById(product + '-total').innerText = '$'+productTotal;
+         calculateTotal();
+
+            }
+
+            function calculateTotal () {   
+               let totalPrice = getInputValue ('phone') * 1219 + getInputValue('case') * 59;
+               document.getElementById('total-price').innerText = '$' + totalPrice;
+               let tax =Math.round(totalPrice * .1);
+               document.getElementById('tax-amount').innerText ='$'+ tax;
+               let grandTotal = totalPrice + tax;
+               document.getElementById('grand-total').innerText = '$' + grandTotal;
+            }
+
+            function getInputValue (product) {
+               const productInput = document.getElementById(product + '-count');
+               const productCount = parseInt(productInput.value);
+               return productCount;
+            }
+
+
+   //    //Positive Button event handler for iPhone11
+   //    const positiveBtn = document.getElementById("positiveBtn");
+   //    positiveBtn.addEventListener("click", function(){
+   //    document.getElementById("iPhone11Value").value =productCountUpdate('iPhone11Value')+1;
+   //    const updatePrice = updateSpanText('iPhone11Price') + 1219;
+   //    document.getElementById("iPhone11Price").innerText = updatePrice ;
+   //    const subTotal = updateSpanText('subTotal') + 1219;
+   //    document.getElementById("subTotal").innerText = subTotal;
+   //    const total = updateSpanText('total') + 1219;
+   //    document.getElementById("total").innerText = total;
+   // })
       
-      //Negative Button event handler iPhone11
-      const negativeBtn = document.getElementById("negativeBtn");
-      negativeBtn.addEventListener("click", function(){
-      document.getElementById("iPhone11Value").value =productCountUpdate('iPhone11Value')-1;
-      const updatePrice = updateSpanText('iPhone11Price') - 1219;
-      document.getElementById("iPhone11Price").innerText = updatePrice ;
-      const subTotal = updateSpanText('subTotal') - 1219;
-      document.getElementById("subTotal").innerText = subTotal;
-      const total = updateSpanText('total') - 1219;
-      document.getElementById("total").innerText = total;
-      })
+   //    //Negative Button event handler iPhone11
+   //    const negativeBtn = document.getElementById("negativeBtn");
+   //    negativeBtn.addEventListener("click", function(){
+   //    document.getElementById("iPhone11Value").value =productCountUpdate('iPhone11Value')-1;
+   //    const updatePrice = updateSpanText('iPhone11Price') - 1219;
+   //    document.getElementById("iPhone11Price").innerText = updatePrice ;
+   //    const subTotal = updateSpanText('subTotal') - 1219;
+   //    document.getElementById("subTotal").innerText = subTotal;
+   //    const total = updateSpanText('total') - 1219;
+   //    document.getElementById("total").innerText = total;
+   //    })
 
-      //Positive Button event handler for Case
-      const positiveBtnCase = document.getElementById("positiveBtnCase");
-      positiveBtnCase.addEventListener("click", function(){
-         document.getElementById("caseValue").value =productCountUpdate('caseValue') +1; 
-         const updatePrice = updateSpanText('casePrice') + 59;
-      document.getElementById("casePrice").innerText = updatePrice ; 
-      const subTotal = updateSpanText('subTotal') + 59;
-      document.getElementById("subTotal").innerText = subTotal;
-      const total = updateSpanText('total') + 59;
-      document.getElementById("total").innerText = total;
-      })
+   //    //Positive Button event handler for Case
+   //    const positiveBtnCase = document.getElementById("positiveBtnCase");
+   //    positiveBtnCase.addEventListener("click", function(){
+   //       document.getElementById("caseValue").value =productCountUpdate('caseValue') +1; 
+   //       const updatePrice = updateSpanText('casePrice') + 59;
+   //    document.getElementById("casePrice").innerText = updatePrice ; 
+   //    const subTotal = updateSpanText('subTotal') + 59;
+   //    document.getElementById("subTotal").innerText = subTotal;
+   //    const total = updateSpanText('total') + 59;
+   //    document.getElementById("total").innerText = total;
+   //    })
 
-      //Negative Button event handler for Case
-      const negativeBtnCase = document.getElementById("negativeBtnCase");
-      negativeBtnCase.addEventListener("click", function(){
-         document.getElementById("caseValue").value =productCountUpdate('caseValue') -1; 
-         const updatePrice = updateSpanText('casePrice') - 59;
-      document.getElementById("casePrice").innerText = updatePrice ; 
-      const subTotal = updateSpanText('subTotal') - 59;
-      document.getElementById("subTotal").innerText = subTotal;
-      const total = updateSpanText('total') - 59;
-      document.getElementById("total").innerText = total;
-      })
+   //    //Negative Button event handler for Case
+   //    const negativeBtnCase = document.getElementById("negativeBtnCase");
+   //    negativeBtnCase.addEventListener("click", function(){
+   //       document.getElementById("caseValue").value =productCountUpdate('caseValue') -1; 
+   //       const updatePrice = updateSpanText('casePrice') - 59;
+   //    document.getElementById("casePrice").innerText = updatePrice ; 
+   //    const subTotal = updateSpanText('subTotal') - 59;
+   //    document.getElementById("subTotal").innerText = subTotal;
+   //    const total = updateSpanText('total') - 59;
+   //    document.getElementById("total").innerText = total;
+   //    })
 
-      function productCountUpdate (id) {
-         const productCount = document.getElementById(id).value;
-         const productNumber = parseFloat(productCount);
-         return productNumber;
-      }
+   //    function productCountUpdate (id) {
+   //       const productCount = document.getElementById(id).value;
+   //       const productNumber = parseFloat(productCount);
+   //       return productNumber;
+   //    }
 
-      function updateSpanText (id) {
-         const currentPrice = document.getElementById(id).innerText;
-         const priceNumber = parseFloat(currentPrice);
-         return priceNumber;
-      }
+   //    function updateSpanText (id) {
+   //       const currentPrice = document.getElementById(id).innerText;
+   //       const priceNumber = parseFloat(currentPrice);
+   //       return priceNumber;
+   //    }
          
    </script>
 </body>
